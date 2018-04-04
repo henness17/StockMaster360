@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.3"
+    "ejs": "^2.5.8",
+    "express": "^4.16.3",
+    "google-finance": "^0.1.11",
+    "yahoo-finance": "^0.3.5"
   }
 }
