@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <body>
-
+<center>
 <h2>STOCKMASTER360</h2>
 <div id="piechart"></div>
+<form action="/search" method="post">
+  Stock Ticker: <input type="text" name="ticker"> <input type="submit" value="Search">
+</form>
+</center>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -23,7 +27,7 @@ function drawChart() {
 ]);
 
   // Optional; add a title and set the width and height of the chart
-  var options = {'title':'<%= sym %>', 'width':550, 'height':400};
+  var options = {'title':'<%= ticker %>', 'width':550, 'height':400};
 
   // Display the chart inside the <div> element with id="piechart"
   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
