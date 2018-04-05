@@ -9,13 +9,14 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
+  var sym = req.query.symbol;
   yahooFinance.historical({ // HISTORICAL
-    symbol: 'AAPL',
+    symbol: sym,
     from: '2012-01-01',
     to: '2012-12-31',
     // period: 'd'  // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
   }, function (err, quotes) {
-    res.render("home", { quotes: quotes });
+    res.render("home", { quotes: quotes, sym: sym });
   });
 });
 
