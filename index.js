@@ -13,6 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
   var ticker = req.query.ticker;
+  if(req.query.ticker == undefined){
+    ticker = 'AMZN';
+  }
   yahooFinance.historical({ // HISTORICAL
     symbol: ticker,
     from: '2012-01-01',
