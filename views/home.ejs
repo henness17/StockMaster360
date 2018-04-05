@@ -4,6 +4,7 @@
 <center>
 <h2>STOCKMASTER360</h2>
 <div id="piechart"></div>
+<div id="linechart"></div>
 <form action="/search" method="post">
   Stock Ticker: <input type="text" name="ticker"> <input type="submit" value="Search">
 </form>
@@ -14,10 +15,11 @@
 <script type="text/javascript">
 // Load google charts
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+google.charts.setOnLoadCallback(drawPieChart);
+google.charts.setOnLoadCallback(drawLineChart);
 
 // Draw the chart and set the chart values
-function drawChart() {
+function drawPieChart() {
   var data = google.visualization.arrayToDataTable([
   ['Task', 'Hours per Day'],
   ['Open', parseFloat(<%= JSON.stringify(quotes[0].open) %>)],
@@ -27,11 +29,36 @@ function drawChart() {
 ]);
 
   // Optional; add a title and set the width and height of the chart
-  var options = {'title':'<%= ticker %>', 'width':550, 'height':400};
+  var options = {'title':'<%= ticker %>', 'width':200, 'height':200};
 
   // Display the chart inside the <div> element with id="piechart"
   var chart = new google.visualization.PieChart(document.getElementById('piechart'));
   chart.draw(data, options);
+}
+
+function drawLineChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Dogs');
+      data.addColumn('number', 'Cats');
+
+      data.addRows([
+        [0, 10, 20], [10, 20, 40], [20, 30, 10]
+      ]);
+
+      var options = {
+        hAxis: {
+          title: 'Time'
+        },
+        vAxis: {
+          title: 'Price'
+        },
+        'width':200, 
+        'height':200
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('linechart'));
+      chart.draw(data, options);
 }
 </script>
 
