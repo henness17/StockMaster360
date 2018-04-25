@@ -1,3 +1,12 @@
+<!--  File        : StockMaster360
+      Authors     : Henness, Regan Townsend, Tim MacNary, Will Bryan
+      Date        : 04/24/2018
+      Description : Allows a user to seafch for a company's stock data by inputting the company's
+                      stock ticker value. The application fetches the opening, high, low, and closing
+                      prices for the stock for the past four months approximately, displaying them
+                      in a table, ten at a time. These values are also displayed to the user in a daily 
+                      time series graph so that the average price trend can be eaisly visualized.
+-->
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -7,21 +16,24 @@
 </head>
 <body>
   <center>
+    <!-- display application title for marketing and brand awareness purposes --> 
     <h2>STOCKMASTER360</h2>
   </center> 
   <div style="width:100%">
     <div style="width:70%;padding:1px;float:left">
       <form action="/search" method="post">
+        <!-- search bar where users inout stock ticker for a given company -->
         Stock Ticker:
         <input type="text" name="ticker">
         <input type="submit" value="Search">
       </form>
+      <!-- ensure there were no errors retrieving the data -->
       <% if(errMsg != "none"){ %>
         <div class="alert alert-danger">
           <strong><%=errMsg%></strong>
         </div>
       <% } %>
-      
+      <!-- table to display the daily stock data -->
       <div id="table_div"></div><br>
       <div><b>
           To zoom in on line graph: drag cursor over desired area 
@@ -29,10 +41,12 @@
           To zoom out of line graph to default: right click
           </b>
       </div>
+       <!-- line chart to dislay the daily data over time -->
       <div id="linechart"></div>
     </div>
     <h1>Messaging side</h1>
     <div style="width:29%;padding:1px;float:right">
+      <!-- chat bar where users can enter a message to send other people currently using the application -->
       <ul id="messages" style="list-style-type: none;"></ul>
       <form action="" id="chat">
         <input id="m" autocomplete="off" />
@@ -41,19 +55,26 @@
     </div>
   </div>
 
+  <!-- scripts for interefacing with google charts via JQuery -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <!-- Primary script for application, handles the data interactions required to poulate the forms above -->
   <script type="text/javascript">
     $(function () {
       var socket = io();
+      // Save chat messgage inputted by user
       $('#chat').submit(function () {
         socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
       });
+      //Add meesage to list of chat messages displayed on screen
       socket.on('chat message', function (msg) {
-        $('#messages').append($('<li style="border-style: solid; padding:5px;margin:5px">').text(msg));
+        if(msg != "") {
+          $('#messages').append($('<li style="border-style: solid; padding:5px;margin:5px">').text(msg));
+        }
       });
     });
     // Load google charts
@@ -61,6 +82,8 @@
       'packages': ['corechart','table']
     });
     google.charts.setOnLoadCallback(drawCharts);
+
+    // Generate and populate the table displaying data values
     function drawCharts() {
         var stockData = <%- JSON.stringify(stockData["Time Series (Daily)"])%>;
         var data = new google.visualization.DataTable();
@@ -71,6 +94,8 @@
         data.addColumn('number', 'Close');
         var keys = Object.keys(stockData).reverse();
         data.addRows(keys.length+1);
+
+        //populate table with values, displaying ten at a time
         for(var row=0; row < keys.length; row++)
         {
             var col = 1;
@@ -83,6 +108,7 @@
             }
 
         }
+        // Construct the line chart displaying the daily trends over time
         var lineChartOptions = {
             title: "Daily time series of " + <%- JSON.stringify(ticker)%>,
             hAxis: {
@@ -97,9 +123,11 @@
             explorer: { actions: ['dragToZoom', 'rightClickToReset'], axis: 'horizontal',maxZoomIn: .1}
         };
 
+        // Generate and load the line chart into the form
         var lineChart = new google.visualization.LineChart(document.getElementById('linechart'));
         lineChart.draw(data, lineChartOptions);
 
+        // Load the table into the form
         var table = new google.visualization.Table(document.getElementById('table_div'));
         table.draw(data, {'pageSize': 10, showRowNumber: false, width: '80%', height: '80%'});
        
