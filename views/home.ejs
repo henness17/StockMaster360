@@ -47,19 +47,21 @@
         data.addColumn('number', 'High');
         data.addColumn('number', 'Low');
         data.addColumn('number', 'Close');
-        data.addRows(Object.keys(stockData).length+1);
-        var row = 0;
-        for(var date in stockData){
+        var keys = Object.keys(stockData).reverse();
+        data.addRows(keys.length+1);
+        for(var row=0; row < keys.length; row++)
+        {
             var col = 1;
-            data.setCell(row, 0, date);
-            for(var val in stockData[date]){
+            data.setCell(row, 0, keys[row]);
+            for(var val in stockData[keys[row]]){
                 if(col < 5){
-                    data.setCell(row, col, stockData[date][val]);
+                    data.setCell(row, col, stockData[keys[row]][val]);
                     col++;
                 }
             }
-            row++;
+
         }
+        
 
         var options = {
         hAxis: {
