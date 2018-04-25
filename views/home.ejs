@@ -12,7 +12,7 @@
       <input type="submit" value="Search">
     </form>
     <ul id="messages"></ul>
-    <form action="">
+    <form action="" id="chat">
       <input id="m" autocomplete="off" />
       <button>Send</button>
     </form>
@@ -24,10 +24,8 @@
   <script type="text/javascript">
     $(function () {
       var socket = io();
-      $('form').submit(function () {
-          if($('#m').val() != ""){
-            socket.emit('chat message', $('#m').val());
-          }
+      $('#chat').submit(function () {
+        socket.emit('chat message', $('#m').val());
         $('#m').val('');
         return false;
       });
@@ -44,7 +42,13 @@
 
     // Draw the chart and set the chart values
     function drawPieChart() {
-        
+      var data = google.visualization.arrayToDataTable([
+        ['Task', 'Hours per Day'],
+        ['Open', parseFloat(<%= JSON.stringify(quotes[0].open) %>)],
+        ['Close', parseFloat(<%= JSON.stringify(quotes[0].close) %>)],
+        ['High', parseFloat(<%= JSON.stringify(quotes[0].high) %>)],
+        ['Low', parseFloat(<%= JSON.stringify(quotes[0].low) %>)],
+      ]);
 
       // Optional; add a title and set the width and height of the chart
       var options = {
@@ -55,40 +59,30 @@
 
       // Display the chart inside the <div> element with id="piechart"
       var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-      //chart.draw(data, options);
+      chart.draw(data, options);
     }
 
     function drawLineChart() {
-        var stockData = <%- JSON.stringify(stockData["Time Series (Daily)"])%>;
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Date');
-        data.addColumn('number', 'Open');
-        data.addColumn('number', 'High');
-        data.addColumn('number', 'Low');
-        data.addColumn('number', 'Close');
-        data.addRows(Object.keys(stockData).length+1);
-        var row = 0;
-        for(var date in stockData){
-            var col = 1;
-            data.setCell(row, 0, date);
-            for(var val in stockData[date]){
-                if(col < 5){
-                    data.setCell(row, col, stockData[date][val]);
-                    col++;
-                }
-            }
-            row++;
-        }
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'X');
+      data.addColumn('number', 'Dogs');
+      data.addColumn('number', 'Cats');
+
+      data.addRows([
+        [0, 10, 20],
+        [10, 20, 40],
+        [20, 30, 10]
+      ]);
 
       var options = {
         hAxis: {
-          title: 'Date'
+          title: 'Time'
         },
         vAxis: {
           title: 'Price'
         },
-        'width': 1000,
-        'height': 1000
+        'width': 200,
+        'height': 200
       };
 
       var chart = new google.visualization.LineChart(document.getElementById('linechart'));
