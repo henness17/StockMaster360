@@ -8,31 +8,38 @@
 <body>
   <center>
     <h2>STOCKMASTER360</h2>
-    
-    <form action="/search" method="post">
-      Stock Ticker:
-      <input type="text" name="ticker">
-      <input type="submit" value="Search">
-    </form>
-    <% if(errMsg != "none"){ %>
-      <div class="alert alert-danger">
-        <strong><%=errMsg%></strong>
+  </center> 
+  <div style="width:100%">
+    <div style="width:70%;padding:1px;float:left">
+      <form action="/search" method="post">
+        Stock Ticker:
+        <input type="text" name="ticker">
+        <input type="submit" value="Search">
+      </form>
+      <% if(errMsg != "none"){ %>
+        <div class="alert alert-danger">
+          <strong><%=errMsg%></strong>
+        </div>
+      <% } %>
+      
+      <div id="table_div"></div><br>
+      <div><b>
+          To zoom in on line graph: drag cursor over desired area 
+          <br>
+          To zoom out of line graph to default: right click
+          </b>
       </div>
-    <% } %>
-    <ul id="messages"></ul>
-    <form action="" id="chat">
-      <input id="m" autocomplete="off" />
-      <button>Send</button>
-    </form>
-    <div id="table_div"></div><br>
-    <div><b>
-        To zoom in on line graph: drag cursor over desired area 
-        <br>
-        To zoom out of line graph to default: right click
-        </b>
+      <div id="linechart"></div>
     </div>
-    <div id="linechart"></div>
-  </center>
+    <h1>Messaging side</h1>
+    <div style="width:29%;padding:1px;float:right">
+      <ul id="messages" style="list-style-type: none;"></ul>
+      <form action="" id="chat">
+        <input id="m" autocomplete="off" />
+        <button>Send</button>
+      </form>
+    </div>
+  </div>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script src="/socket.io/socket.io.js"></script>
@@ -46,7 +53,7 @@
         return false;
       });
       socket.on('chat message', function (msg) {
-        $('#messages').append($('<li>').text(msg));
+        $('#messages').append($('<li style="border-style: solid; padding:5px;margin:5px">').text(msg));
       });
     });
     // Load google charts

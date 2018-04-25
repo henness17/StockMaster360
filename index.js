@@ -24,7 +24,10 @@ app.get('/', function (req, res) {
     ticker = 'AMZN';
     errMsg = 'none';
   }
-
+  if(errMsg != 'none'){
+    ticker = 'AMZN';
+  }
+  
   alpha.data.daily(ticker).then(stockData => {
     res.render("home", {
         stockData: stockData,
