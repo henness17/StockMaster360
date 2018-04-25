@@ -4,7 +4,7 @@
 <body>
   <center>
     <h2>STOCKMASTER360</h2>
-    <div id="piechart"></div>
+    <div id="table_div"></div>
     <div id="linechart"></div>
     <form action="/search" method="post">
       Stock Ticker:
@@ -35,11 +35,10 @@
     });
     // Load google charts
     google.charts.load('current', {
-      'packages': ['corechart']
+      'packages': ['corechart','table']
     });
-    google.charts.setOnLoadCallback(drawLineChart);
-
-    function drawLineChart() {
+    google.charts.setOnLoadCallback(drawCharts);
+    function drawCharts() {
         var stockData = <%- JSON.stringify(stockData["Time Series (Daily)"])%>;
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Date');
@@ -61,20 +60,24 @@
             }
 
         }
-        
+        var lineChartOptions = {
+            title: "Daily time series of " + <%- JSON.stringify(ticker)%>,
+            hAxis: {
+            title: 'Date'
+            },
+            vAxis: {
+            title: 'Price'
+            },
+            'width': '80%',
+            'height': 500
+        };
 
-        var options = {
-        hAxis: {
-          title: 'Date'
-        },
-        vAxis: {
-          title: 'Price'
-        },
-        'width': 1000,
-        'height': 1000
-      };
-      var chart = new google.visualization.LineChart(document.getElementById('linechart'));
-      chart.draw(data, options);
+        var lineChart = new google.visualization.LineChart(document.getElementById('linechart'));
+        lineChart.draw(data, lineChartOptions);
+
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+        table.draw(data, {showRowNumber: false, width: '80%', height: '80%'});
+       
     }
   </script>
 
