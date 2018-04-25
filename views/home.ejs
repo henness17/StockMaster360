@@ -76,7 +76,7 @@
         lineChart.draw(data, lineChartOptions);
 
         var table = new google.visualization.Table(document.getElementById('table_div'));
-        table.draw(data, {showRowNumber: false, width: '80%', height: '80%'});
+        table.draw(data, {'pageSize': 10, showRowNumber: false, width: '80%', height: '80%'});
        
     }
   </script>
