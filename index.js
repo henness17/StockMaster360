@@ -3,7 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var yahooFinance = require('yahoo-finance');
+const alpha = require('alphavantage')({ key: 'PTEM9VERB2FDGHUU' });
 
 app.set('port', process.env.PORT || 5000);
 
@@ -20,16 +20,12 @@ app.get('/', function (req, res) {
   if (req.query.ticker == undefined) {
     ticker = 'AMZN';
   }
-  yahooFinance.historical({ // HISTORICAL
-    symbol: ticker,
-    from: '2012-01-01',
-    to: '2012-12-31',
-    // period: 'd'  // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
-  }, function (err, quotes) {
+
+  alpha.data.daily(ticker).then(stockData => {
     res.render("home", {
-      quotes: quotes,
-      ticker: ticker
-    });
+        stockData: stockData,
+        ticker: ticker
+      });
   });
 });
 
