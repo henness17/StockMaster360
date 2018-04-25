@@ -41,7 +41,7 @@
     function drawCharts() {
         var stockData = <%- JSON.stringify(stockData["Time Series (Daily)"])%>;
         var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Date');
+        data.addColumn('date', 'Date');
         data.addColumn('number', 'Open');
         data.addColumn('number', 'High');
         data.addColumn('number', 'Low');
@@ -51,7 +51,7 @@
         for(var row=0; row < keys.length; row++)
         {
             var col = 1;
-            data.setCell(row, 0, keys[row]);
+            data.setCell(row, 0, new Date(keys[row]));
             for(var val in stockData[keys[row]]){
                 if(col < 5){
                     data.setCell(row, col, stockData[keys[row]][val]);
@@ -70,7 +70,8 @@
             },
             'width': '80%',
             'height': 500,
-            curveType: 'function'
+            curveType: 'function',
+            explorer: { actions: ['dragToZoom', 'rightClickToReset'], axis: 'horizontal'}
         };
 
         var lineChart = new google.visualization.LineChart(document.getElementById('linechart'));
