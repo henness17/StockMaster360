@@ -22,6 +22,7 @@ app.get('/', function (req, res) {
   var errMsg = req.query.errMsg;
   if (req.query.ticker == undefined) {
     ticker = 'AMZN';
+    errMsg = 'none';
   }
 
   alpha.data.daily(ticker).then(stockData => {
@@ -37,7 +38,7 @@ app.post('/search', function (req, res) {
   var ticker = req.body.ticker.toUpperCase();
   if(cts.valid(ticker))
   {
-    errMsg = "";
+    errMsg = "none";
     res.redirect('/?ticker=' + ticker + "&errMsg=" + errMsg);
   }
   else

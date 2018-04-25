@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
 <body>
   <center>
     <h2>STOCKMASTER360</h2>
@@ -10,7 +14,11 @@
       <input type="text" name="ticker">
       <input type="submit" value="Search">
     </form>
-    <h1 style="color:red"><%=errMsg%></h1>
+    <% if(errMsg != "none"){ %>
+      <div class="alert alert-danger">
+        <strong><%=errMsg%></strong>
+      </div>
+    <% } %>
     <ul id="messages"></ul>
     <form action="" id="chat">
       <input id="m" autocomplete="off" />
