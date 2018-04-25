@@ -4,6 +4,18 @@
 <body>
   <center>
     <h2>STOCKMASTER360</h2>
+    
+    <form action="/search" method="post">
+      Stock Ticker:
+      <input type="text" name="ticker">
+      <input type="submit" value="Search">
+    </form>
+    <h1 style="color:red"><%=errMsg%></h1>
+    <ul id="messages"></ul>
+    <form action="" id="chat">
+      <input id="m" autocomplete="off" />
+      <button>Send</button>
+    </form>
     <div id="table_div"></div><br>
     <div><b>
         To zoom in on line graph: drag cursor over desired area 
@@ -12,16 +24,6 @@
         </b>
     </div>
     <div id="linechart"></div>
-    <form action="/search" method="post">
-      Stock Ticker:
-      <input type="text" name="ticker">
-      <input type="submit" value="Search">
-    </form>
-    <ul id="messages"></ul>
-    <form action="" id="chat">
-      <input id="m" autocomplete="off" />
-      <button>Send</button>
-    </form>
   </center>
 
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

@@ -1,7 +1,9 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+var cts = require('check-ticker-symbol');
 var io = require('socket.io')(http);
+var errMsg = "";
 
 const alpha = require('alphavantage')({ key: 'PTEM9VERB2FDGHUU' });
 
@@ -17,6 +19,7 @@ app.use(bodyParser.urlencoded({
 
 app.get('/', function (req, res) {
   var ticker = req.query.ticker;
+  var errMsg = req.query.errMsg;
   if (req.query.ticker == undefined) {
     ticker = 'AMZN';
   }
@@ -24,14 +27,25 @@ app.get('/', function (req, res) {
   alpha.data.daily(ticker).then(stockData => {
     res.render("home", {
         stockData: stockData,
-        ticker: ticker
+        ticker: ticker,
+        errMsg: errMsg
       });
   });
 });
 
 app.post('/search', function (req, res) {
-  var ticker = req.body.ticker;
-  res.redirect('/?ticker=' + ticker);
+  var ticker = req.body.ticker.toUpperCase();
+  if(cts.valid(ticker))
+  {
+    errMsg = "";
+    res.redirect('/?ticker=' + ticker + "&errMsg=" + errMsg);
+  }
+  else
+  {
+    errMsg = "Invalid ticker, please try again";
+    res.redirect('/?ticker=AMZN' + "&errMsg=" + errMsg);
+  }
+  
 });
 
 io.on('connection', function (socket) {
