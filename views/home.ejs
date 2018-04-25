@@ -4,7 +4,13 @@
 <body>
   <center>
     <h2>STOCKMASTER360</h2>
-    <div id="table_div"></div>
+    <div id="table_div"></div><br>
+    <div><b>
+        To zoom in on line graph: drag cursor over desired area 
+        <br>
+        To zoom out of line graph to default: right click
+        </b>
+    </div>
     <div id="linechart"></div>
     <form action="/search" method="post">
       Stock Ticker:
@@ -71,7 +77,7 @@
             'width': '80%',
             'height': 500,
             curveType: 'function',
-            explorer: { actions: ['dragToZoom', 'rightClickToReset'], axis: 'horizontal'}
+            explorer: { actions: ['dragToZoom', 'rightClickToReset'], axis: 'horizontal',maxZoomIn: .1}
         };
 
         var lineChart = new google.visualization.LineChart(document.getElementById('linechart'));
